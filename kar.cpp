@@ -59,6 +59,8 @@ bool Kar::rename(const QString& name, const QString& newName)
 	
 	m_data[newName] = m_data[name];
 	m_data.remove(name);
+	
+	return true;
 }
 
 QByteArray Kar::data(const QString& name) const
@@ -107,11 +109,35 @@ bool Kar::save(const QString& path)
 	return true;
 }
 
+const Kar::DataMap& Kar::data() const
+{
+	return m_data;
+}
+
+void Kar::setData(const Kar::DataMap& data)
+{
+	m_data = data;
+}
+
 Kar::Kar()
 {
 }
 
-Kar::Kar(const QMap<QString, QByteArray>& data)
+Kar::Kar(const Kar::DataMap& data)
 	: m_data(data)
 {
+}
+
+QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
+{
+	out << kar.data();
+	return out;
+}
+
+QDataStream& operator>>(QDataStream& in, Kiss::Kar& kar)
+{
+	Kar::DataMap data;
+	in >> data;
+	kar.setData(data);
+	return in;
 }

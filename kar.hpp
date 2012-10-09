@@ -30,7 +30,12 @@ namespace Kiss
 {
 	class Kar
 	{
-	public:	
+	public:
+		typedef QMap<QString, QByteArray> DataMap;
+		
+		Kar();
+		Kar(const DataMap& data);
+		
 		bool addFile(const QString& name, const QByteArray& data);
 		void setFile(const QString& name, const QByteArray& data);
 		bool removeFile(const QString& name);
@@ -44,13 +49,16 @@ namespace Kiss
 		static Kar *load(const QString& path);
 		bool save(const QString& path);
 		
-	private:
-		Kar();
-		Kar(const QMap<QString, QByteArray>& data);
+		const DataMap& data() const;
+		void setData(const DataMap& data);
 		
-		QMap<QString, QByteArray> m_data;
+	private:
+		DataMap m_data;
 	};
 }
+
+QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar);
+QDataStream& operator>>(QDataStream& in, Kiss::Kar& kar);
 
 #endif
 
