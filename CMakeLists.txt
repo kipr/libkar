@@ -16,3 +16,4 @@ install(FILES kar.hpp DESTINATION include)
 install(TARGETS kar DESTINATION lib)
 
 add_subdirectory(tests)
+add_subdirectory(tools)
