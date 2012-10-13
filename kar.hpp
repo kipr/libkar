@@ -25,9 +25,15 @@
 #include <QMap>
 #include <QStringList>
 #include <QByteArray>
+#include <QDataStream>
+#include <QSharedPointer>
 
 namespace Kiss
 {
+	class Kar;
+	
+	typedef QSharedPointer<Kar> KarPtr;
+	
 	class Kar
 	{
 	public:
@@ -45,14 +51,20 @@ namespace Kiss
 		QByteArray data(const QString& name) const;
 		QStringList files() const;
 		
-		static Kar *create();
-		static Kar *load(const QString& path);
+		static KarPtr create();
+		static KarPtr create(const QString& path);
+		static KarPtr load(const QString& path);
+		
 		bool save(const QString& path);
+		bool extract(const QString& path) const;
 		
 		const DataMap& data() const;
 		void setData(const DataMap& data);
 		
 	private:
+		static void create(const KarPtr& archive, const QString& path, const QString& subpath);
+		bool extract(const QString& path, const QString& subpath) const;
+		
 		DataMap m_data;
 	};
 }

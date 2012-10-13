@@ -21,8 +21,11 @@
 #include "kar.hpp"
 
 #include <QFile>
+#include <QFileInfo>
+#include <QDir>
 #include <QIODevice>
 #include <QDataStream>
+#include <QDebug>
 
 using namespace Kiss;
 
@@ -73,15 +76,22 @@ QStringList Kar::files() const
 	return QStringList(m_data.keys());
 }
 
-Kar *Kar::create()
+KarPtr Kar::create()
 {
-	return new Kar();
+	return KarPtr(new Kar());
 }
 
-Kar *Kar::load(const QString& path)
+KarPtr Kar::create(const QString& path)
+{
+	KarPtr archive = create();
+	create(archive, path, "");
+	return archive;
+}
+
+KarPtr Kar::load(const QString& path)
 {
 	QFile file(path);
-	if(!file.open(QIODevice::ReadOnly)) return 0;
+	if(!file.open(QIODevice::ReadOnly)) return KarPtr();
 	QDataStream stream(&file);
 	stream.setVersion(QDataStream::Qt_4_0);
 	QMap<QString, QByteArray> compressedData;
@@ -91,7 +101,7 @@ Kar *Kar::load(const QString& path)
 		data.insert(key, qUncompress(compressedData[key]));
 	}
 	file.close();
-	return new Kar(data);
+	return KarPtr(new Kar(data));
 }
 
 bool Kar::save(const QString& path)
@@ -107,6 +117,11 @@ bool Kar::save(const QString& path)
 	stream << compressedData;
 	file.close();
 	return true;
+}
+
+bool Kar::extract(const QString& path) const
+{
+	return extract(path, "");
 }
 
 const Kar::DataMap& Kar::data() const
@@ -126,6 +141,66 @@ Kar::Kar()
 Kar::Kar(const Kar::DataMap& data)
 	: m_data(data)
 {
+}
+
+void Kar::create(const KarPtr& archive, const QString& path, const QString& subpath)
+{
+	QFileInfoList files = QDir(path + (subpath.isEmpty() ? "" : "/" + subpath)).entryInfoList(QDir::Dirs
+		| QDir::Files | QDir::NoDot | QDir::NoDotDot);
+	foreach(const QFileInfo& file, files) {
+		if(file.isDir()) {
+			create(archive, path, (subpath.isEmpty() ? "" : subpath + "/") + file.fileName());
+			continue;
+		}
+		QFile f(file.absoluteFilePath());
+		if(!f.open(QIODevice::ReadOnly)) continue;
+		archive->addFile((subpath.isEmpty() ? "" : subpath + "/") + file.fileName(), f.readAll());
+		f.close();
+	}
+}
+
+bool Kar::extract(const QString& path, const QString& subpath) const
+{
+	if(!QDir().mkpath(path + "/" + subpath)) {
+		qCritical() << "Failed to create path" << path + "/" + subpath;
+		return false;
+	}
+	
+	QStringList pathEntries;
+	foreach(const QString& file, files()) {
+		if(!subpath.isEmpty() && !file.startsWith(subpath + "/")) continue;
+		pathEntries << file.mid(subpath.isEmpty() ? 0 : subpath.size() + 1);
+	}
+	
+	QStringList pathFiles;
+	QStringList pathDirs;
+	foreach(const QString& entry, pathEntries) {
+		if(entry.contains("/")) {
+			QString name = entry.section("/", 0, 0);
+			if(!name.isEmpty()) pathDirs << name;
+			continue;
+		}
+		pathFiles << entry;
+	}
+	
+	pathDirs.removeDuplicates();
+	
+	foreach(const QString& dir, pathDirs) {
+		const QString dirPath = (subpath.isEmpty() ? "" : subpath + "/") + dir;
+		if(!extract(path, dirPath)) return false;
+	}
+	
+	foreach(const QString& file, pathFiles) {
+		const QString filePath = (subpath.isEmpty() ? "" : subpath + "/") + file;
+		QFile f(path + "/" + filePath);
+		if(!f.open(QIODevice::WriteOnly)) {
+			qWarning() << "Failed to write" << path + "/" + filePath;
+			continue;
+		}
+		f.write(data(filePath));
+		f.close();
+	}
+	return true;
 }
 
 QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
