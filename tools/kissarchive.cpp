@@ -11,12 +11,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/algorithm/string.hpp>
-
 using namespace std;
-using namespace boost;
 
 #define MAX_PACKAGE_NAME 128
 #define MAX_PACKAGE_VERSION 128
@@ -96,24 +91,20 @@ bool loadMap(const QString& file, QStringList& dirs, QMap<QString, QString>& ret
 	while(!in.eof()) {
 		string line;
 		std::getline(in, line);
-		char_separator<char> sep("=>");
-		tokenizer<char_separator<char> > tokens(line, sep);
-		tokenizer<char_separator<char> >::iterator it = tokens.begin();
-		if(it == tokens.end()) continue; // Empty line
+		QString qLine = QString::fromStdString(line);
 		
-		string arg1 = *it;
-		if(arg1.size() > 0 && arg1[0] == '#') continue; // Comment line
-		++it;
-		if(it == tokens.end()) {
-			dirs.push_back(QString::fromStdString(arg1));
+		if(qLine.isEmpty() || qLine.startsWith("#")) continue;
+		
+		QStringList parts = qLine.split("=>");
+		
+		if(parts.size() == 1) {
+			dirs.push_back(parts[0]);
 			continue;
 		}
-		string dest = *it;
-		trim(arg1);
-		trim(dest);
-		if(arg1.empty()) continue;
-		if(dest.empty()) continue;
-		ret[QString::fromStdString(arg1)] = QString::fromStdString(dest);
+		
+		if(parts.size() > 2 || parts[0].isEmpty() || parts[1].isEmpty()) continue;
+		
+		ret[parts[0]] = parts[1];
 	}
 
 	in.close();
@@ -146,15 +137,21 @@ int main(int argc, char *argv[])
 		QString name = argv[2];
 		QStringList dirs;
 		QMap<QString, QString> files;
-		if(!loadMap(argc != 4 ? name + ".kam" : argv[4], dirs, files)) {
+#ifdef Q_OS_MAC
+		if(!loadMap(argc != 4 ? name + "_osx.kam" : argv[4], dirs, files)) {
 			return false;
 		}
+#elif defined(Q_OS_WIN)
+		if(!loadMap(argc != 4 ? name + "_win.kam" : argv[4], dirs, files)) {
+			return false;
+		}
+#endif
 		
-		if(create(name, argv[3], dirs, files)) cout << "Success!" << endl;
-		else {
+		if(!create(name, argv[3], dirs, files)) {
 			cout << "Failure." << endl;
 			return 1;
 		}
+		
 	} else if(!strcmp(argv[1], "--extract") || !strcmp(argv[1], "-e")) {
 			if(argc != 2 && argc != 3) {
 				usage(argv[0]);
@@ -162,8 +159,7 @@ int main(int argc, char *argv[])
 			}
 
 			QString name = argv[2];
-			if(extract(name, argc == 3 ? argv[3] : getenv("PWD"))) cout << "Success!" << endl;
-			else {
+			if(!extract(name, argc == 3 ? argv[3] : getenv("PWD"))) {
 				cout << "Failure." << endl;
 				return 1;
 			}
