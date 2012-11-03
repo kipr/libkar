@@ -13,8 +13,10 @@ add_library(kar SHARED kar.cpp)
 target_link_libraries(kar ${QT_LIBRARIES})
 
 IF(WIN32)
-install(FILES kar.hpp DESTINATION /include)
-INSTALL(TARGETS kar ARCHIVE DESTINATION /lib RUNTIME DESTINATION /lib)
+install(FILES kar.hpp DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include)
+INSTALL(TARGETS kar
+	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
+	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
 ELSE(WIN32)
 install(FILES kar.hpp DESTINATION include)
 install(TARGETS kar DESTINATION lib)
