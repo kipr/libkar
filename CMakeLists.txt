@@ -12,8 +12,15 @@ set(LIBRARY_OUTPUT_PATH ${libkar_SOURCE_DIR}/lib)
 add_library(kar SHARED kar.cpp)
 target_link_libraries(kar ${QT_LIBRARIES})
 
+IF(WIN32)
+install(FILES kar.hpp DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include)
+INSTALL(TARGETS kar
+	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
+	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
+ELSE(WIN32)
 install(FILES kar.hpp DESTINATION include)
 install(TARGETS kar DESTINATION lib)
+ENDIF(WIN32)
 
 IF(APPLE)
 SET(OSX_INSTALL_NAMES_SCRIPT "${libkar_SOURCE_DIR}/scripts/osx_install_names.sh")
