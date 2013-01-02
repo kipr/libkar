@@ -205,14 +205,22 @@ bool Kar::extract(const QString& path, const QString& subpath) const
 
 QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
 {
-	out << kar.data();
+	QMap<QString, QByteArray> compressedData;
+	foreach(const QString& key, kar.data().keys()) {
+		compressedData.insert(key, qCompress(kar.data()[key]));
+	}
+	out << compressedData;
 	return out;
 }
 
 QDataStream& operator>>(QDataStream& in, Kiss::Kar& kar)
 {
+	QMap<QString, QByteArray> compressedData;
+	in >> compressedData;
 	Kar::DataMap data;
-	in >> data;
+	foreach(const QString& key, compressedData.keys()) {
+		data.insert(key, qUncompress(compressedData[key]));
+	}
 	kar.setData(data);
 	return in;
 }
