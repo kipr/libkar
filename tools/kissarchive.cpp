@@ -104,7 +104,7 @@ bool loadMap(const QString& file, QStringList& dirs, QMap<QString, QString>& ret
 		
 		if(parts.size() > 2 || parts[0].isEmpty() || parts[1].isEmpty()) continue;
 		
-		ret[parts[0]] = parts[1];
+		ret[parts[0].trimmed()] = parts[1].trimmed();
 	}
 
 	in.close();
