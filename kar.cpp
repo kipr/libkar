@@ -31,6 +31,8 @@ using namespace Kiss;
 
 #define MAX_FILENAME_SIZE 128
 
+#define KAR_MAGIC ("karkar")
+
 bool Kar::addFile(const QString& name, const QByteArray& data)
 {
 	if(m_data.contains(name)) return false;
@@ -95,6 +97,14 @@ KarPtr Kar::load(const QString& path)
 	QDataStream stream(&file);
 	stream.setVersion(QDataStream::Qt_4_0);
 	QMap<QString, QByteArray> compressedData;
+	char *magic;
+	stream >> magic;
+	const bool good = strcmp(magic, KAR_MAGIC) != 0;
+	delete[] magic;
+	if(!good) {
+		file.close();
+		return KarPtr();
+	}
 	stream >> compressedData;
 	QMap<QString, QByteArray> data;
 	foreach(const QString& key, compressedData.keys()) {
@@ -114,6 +124,7 @@ bool Kar::save(const QString& path)
 	foreach(const QString& key, m_data.keys()) {
 		compressedData.insert(key, qCompress(m_data[key]));
 	}
+	stream << KAR_MAGIC;
 	stream << compressedData;
 	file.close();
 	return true;
@@ -209,6 +220,7 @@ QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
 	foreach(const QString& key, kar.data().keys()) {
 		compressedData.insert(key, qCompress(kar.data()[key]));
 	}
+	out << KAR_MAGIC;
 	out << compressedData;
 	return out;
 }
@@ -216,6 +228,11 @@ QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
 QDataStream& operator>>(QDataStream& in, Kiss::Kar& kar)
 {
 	QMap<QString, QByteArray> compressedData;
+	char *magic;
+	in >> magic;
+	const bool good = strcmp(magic, KAR_MAGIC) != 0;
+	delete[] magic;
+	if(!good) return in;
 	in >> compressedData;
 	Kar::DataMap data;
 	foreach(const QString& key, compressedData.keys()) {
