@@ -105,7 +105,7 @@ KarPtr Kar::load(const QString& path)
 	QMap<QString, QByteArray> compressedData;
 	char *magic;
 	stream >> magic;
-	const bool good = strcmp(magic, KAR_MAGIC) != 0;
+	const bool good = strcmp(magic, KAR_MAGIC) == 0;
 	delete[] magic;
 	if(!good) {
 		file.close();
@@ -236,7 +236,7 @@ QDataStream& operator>>(QDataStream& in, Kiss::Kar& kar)
 	QMap<QString, QByteArray> compressedData;
 	char *magic;
 	in >> magic;
-	const bool good = strcmp(magic, KAR_MAGIC) != 0;
+	const bool good = strcmp(magic, KAR_MAGIC) == 0;
 	delete[] magic;
 	if(!good) return in;
 	in >> compressedData;
