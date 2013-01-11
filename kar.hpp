@@ -28,6 +28,8 @@
 #include <QDataStream>
 #include <QSharedPointer>
 
+#define KAR_SPECIAL_PREFIX "internal::"
+
 namespace Kiss
 {
 	class Kar;

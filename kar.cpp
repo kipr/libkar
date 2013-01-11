@@ -75,7 +75,13 @@ QByteArray Kar::data(const QString& name) const
 
 QStringList Kar::files() const
 {
-	return QStringList(m_data.keys());
+	QStringList all(m_data.keys());
+	QStringList ret;
+	foreach(const QString &file, all) {
+		if(file.startsWith(KAR_SPECIAL_PREFIX)) continue;
+		ret << file;
+	}
+	return ret;
 }
 
 KarPtr Kar::create()
