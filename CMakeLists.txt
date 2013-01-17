@@ -12,6 +12,10 @@ set(LIBRARY_OUTPUT_PATH ${libkar_SOURCE_DIR}/lib)
 add_library(kar SHARED kar.cpp)
 target_link_libraries(kar ${QT_LIBRARIES})
 
+IF(APPLE)
+	add_definitions(-arch x86_64)
+ENDIF(APPLE)
+
 IF(WIN32)
 install(FILES kar.hpp DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include)
 INSTALL(TARGETS kar
