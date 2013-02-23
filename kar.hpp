@@ -63,6 +63,8 @@ namespace Kiss
 		const DataMap& data() const;
 		void setData(const DataMap& data);
 		
+		static bool isValid(const QString &path);
+		
 	private:
 		static void create(const KarPtr& archive, const QString& path, const QString& subpath);
 		bool extract(const QString& path, const QString& subpath) const;

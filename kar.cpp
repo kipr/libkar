@@ -220,6 +220,22 @@ bool Kar::extract(const QString& path, const QString& subpath) const
 	return true;
 }
 
+bool Kar::isValid(const QString &path)
+{
+	QFile file(path);
+	if(!file.open(QIODevice::ReadOnly)) {
+		qDebug() << "Failed to open" << path;
+		return false;
+	}
+	QDataStream in(&file);
+	char *magic;
+	in >> magic;
+	const bool good = strcmp(magic, KAR_MAGIC) == 0;
+	delete[] magic;
+	file.close();
+	return good;
+}
+
 QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
 {
 	QMap<QString, QByteArray> compressedData;
