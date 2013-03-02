@@ -228,9 +228,14 @@ bool Kar::isValid(const QString &path)
 		return false;
 	}
 	QDataStream in(&file);
-	char *magic;
-	in >> magic;
-	const bool good = strcmp(magic, KAR_MAGIC) == 0;
+	const int length = strlen(KAR_MAGIC) + 1;
+	char *magic = new char[length];
+	bool good = true;
+	int readLength = 0;
+	in >> readLength;
+	const int actualLength = in.readRawData(magic, readLength);
+	if(good) good &= length == readLength && length == actualLength;
+	if(good) good &= strcmp(magic, KAR_MAGIC) == 0;
 	delete[] magic;
 	file.close();
 	return good;
