@@ -232,10 +232,21 @@ bool Kar::isValid(const QString &path)
 	char *magic = new char[length];
 	bool good = true;
 	int readLength = 0;
-	in >> readLength;
-	const int actualLength = in.readRawData(magic, readLength);
-	if(good) good &= length == readLength && length == actualLength;
+	int actualLength = 0;
+	
+	if(good) good &= sizeof(readLength) == in.readRawData(reinterpret_cast<char *>(&readLength), sizeof(readLength));
+	
+	// readLength is big endian. Make it little endian.
+	readLength = ((readLength >> 24) & 0x000000FF)
+		| ((readLength << 8) & 0x00FF0000)
+		| ((readLength >> 8) & 0x0000FF00)
+		| ((readLength << 24) & 0xFF000000);
+	
+	if(good) good &= readLength == length;
+	if(good) actualLength = in.readRawData(magic, readLength);
+	if(good) good &= length == actualLength;
 	if(good) good &= strcmp(magic, KAR_MAGIC) == 0;
+	
 	delete[] magic;
 	file.close();
 	return good;
