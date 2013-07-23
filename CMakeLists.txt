@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 2.8.0)
 find_package(Qt4 REQUIRED)
 
 set(QT_DONT_USE_QTGUI TRUE)
-set(TESTS ${libkar_SOURCE_DIR}/tests)
 
 include(${QT_USE_FILE})
 
@@ -36,5 +35,4 @@ ADD_CUSTOM_TARGET(osx_install_names ALL
 	DEPENDS kar)
 ENDIF(APPLE)
 
-add_subdirectory(tests)
 add_subdirectory(tools)
