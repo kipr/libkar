@@ -28,6 +28,8 @@
 #include <QDataStream>
 #include <QSharedPointer>
 
+#include "export.h"
+
 #define KAR_SPECIAL_PREFIX "internal::"
 
 namespace kiss
@@ -36,7 +38,7 @@ namespace kiss
 	
 	typedef QSharedPointer<Kar> KarPtr;
 	
-	class Kar
+	class DLL_EXPORT Kar
 	{
 	public:
 		typedef QMap<QString, QByteArray> DataMap;
