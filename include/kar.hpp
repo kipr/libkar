@@ -30,7 +30,7 @@
 
 #define KAR_SPECIAL_PREFIX "internal::"
 
-namespace Kiss
+namespace kiss
 {
 	class Kar;
 	
@@ -73,8 +73,8 @@ namespace Kiss
 	};
 }
 
-QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar);
-QDataStream& operator>>(QDataStream& in, Kiss::Kar& kar);
+QDataStream& operator<<(QDataStream& out, const kiss::Kar& kar);
+QDataStream& operator>>(QDataStream& in, kiss::Kar& kar);
 
 #endif
 

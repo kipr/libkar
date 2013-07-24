@@ -27,7 +27,7 @@
 #include <QDataStream>
 #include <QDebug>
 
-using namespace Kiss;
+using namespace kiss;
 
 #define MAX_FILENAME_SIZE 128
 
@@ -252,7 +252,7 @@ bool Kar::isValid(const QString &path)
 	return good;
 }
 
-QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
+QDataStream& operator<<(QDataStream& out, const kiss::Kar& kar)
 {
 	QMap<QString, QByteArray> compressedData;
 	foreach(const QString& key, kar.data().keys()) {
@@ -263,7 +263,7 @@ QDataStream& operator<<(QDataStream& out, const Kiss::Kar& kar)
 	return out;
 }
 
-QDataStream& operator>>(QDataStream& in, Kiss::Kar& kar)
+QDataStream& operator>>(QDataStream& in, kiss::Kar& kar)
 {
 	QMap<QString, QByteArray> compressedData;
 	char *magic;

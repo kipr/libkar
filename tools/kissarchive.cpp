@@ -22,7 +22,7 @@ struct PackageHeader
 	char version[MAX_PACKAGE_VERSION];
 };
 
-bool writeFile(const QString& file, const QString& dest, const Kiss::KarPtr& archive)
+bool writeFile(const QString& file, const QString& dest, const kiss::KarPtr& archive)
 {
 	QFile in(file);
 	if(!in.open(QIODevice::ReadOnly)) {
@@ -46,7 +46,7 @@ bool create(const QString& name, const QString& version, const QStringList& dirs
 		return false;
 	}
 	
-	Kiss::KarPtr archive = Kiss::Kar::create();
+	kiss::KarPtr archive = kiss::Kar::create();
 	PackageHeader header;
 	memcpy(header.name, name.toStdString().c_str(), name.size());
 	memcpy(header.version, version.toStdString().c_str(), version.size());
@@ -68,7 +68,7 @@ bool create(const QString& name, const QString& version, const QStringList& dirs
 
 bool extract(const QString& name, const QString& to)
 {
-	Kiss::KarPtr archive = Kiss::Kar::load(name + ".kiss");
+	kiss::KarPtr archive = kiss::Kar::load(name + ".kiss");
 	if(!archive) {
 		cout << "Failed to open \"" << name.toStdString() + ".kiss\"" << endl;
 		return false;
