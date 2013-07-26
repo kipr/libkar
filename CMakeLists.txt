@@ -13,35 +13,35 @@ set(SRC ${libkar_SOURCE_DIR}/src)
 
 include_directories(${INCLUDE})
 
-FILE(GLOB INCLUDES ${INCLUDE}/*.h ${INCLUDE}/*.hpp)
-FILE(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
+file(GLOB INCLUDES ${INCLUDE}/*.h ${INCLUDE}/*.hpp)
+file(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
 
 set(LIBRARY_OUTPUT_PATH ${libkar_SOURCE_DIR}/lib)
 add_library(kar SHARED ${SOURCES})
 target_link_libraries(kar ${QT_LIBRARIES})
 
-IF(APPLE)
+if(APPLE)
 	add_definitions(-arch x86_64)
-ENDIF(APPLE)
+endif(APPLE)
 
-IF(WIN32)
+if(WIN32)
 install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include)
-INSTALL(TARGETS kar
+install(TARGETS kar
 	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
 	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
-ELSE(WIN32)
+else(WIN32)
 install(FILES ${INCLUDES} DESTINATION include)
 install(TARGETS kar DESTINATION lib)
-ENDIF(WIN32)
+endif(WIN32)
 
-IF(APPLE)
-SET(OSX_INSTALL_NAMES_SCRIPT "${libkar_SOURCE_DIR}/scripts/osx_install_names.sh")
-SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -headerpad_max_install_names")
-ADD_CUSTOM_TARGET(osx_install_names ALL 
+if(APPLE)
+set(OSX_INSTALL_NAMES_SCRIPT "${libkar_SOURCE_DIR}/scripts/osx_install_names.sh")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -headerpad_max_install_names")
+add_custom_target(osx_install_names ALL 
 	COMMAND sh ${OSX_INSTALL_NAMES_SCRIPT} ${LIBRARY_OUTPUT_PATH}/libkar.dylib
 		QtCore.framework/Versions/4/QtCore
 	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 	DEPENDS kar)
-ENDIF(APPLE)
+endif(APPLE)
 
 add_subdirectory(tools)

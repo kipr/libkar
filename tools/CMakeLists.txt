@@ -1,10 +1,10 @@
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR})
 
-ADD_EXECUTABLE(kissarchive kissarchive.cpp)
-TARGET_LINK_LIBRARIES(kissarchive ${QT_LIBRARIES} kar)
+add_executable(kissarchive kissarchive.cpp)
+target_link_libraries(kissarchive ${QT_LIBRARIES} kar)
 
-IF(WIN32)
-INSTALL(TARGETS kissarchive RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/bin)
-ELSE(WIN32)
-INSTALL(TARGETS kissarchive RUNTIME DESTINATION bin)
-ENDIF(WIN32)
+if(WIN32)
+install(TARGETS kissarchive RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/bin)
+else(WIN32)
+install(TARGETS kissarchive RUNTIME DESTINATION bin)
+endif(WIN32)
