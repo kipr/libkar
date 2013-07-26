@@ -5,6 +5,6 @@ target_link_libraries(kissarchive ${QT_LIBRARIES} kar)
 
 if(WIN32)
 install(TARGETS kissarchive RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/bin)
-else(WIN32)
+else()
 install(TARGETS kissarchive RUNTIME DESTINATION bin)
-endif(WIN32)
+endif()

@@ -22,17 +22,17 @@ target_link_libraries(kar ${QT_LIBRARIES})
 
 if(APPLE)
 	add_definitions(-arch x86_64)
-endif(APPLE)
+endif()
 
 if(WIN32)
 install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include)
 install(TARGETS kar
 	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
 	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
-else(WIN32)
+else()
 install(FILES ${INCLUDES} DESTINATION include)
 install(TARGETS kar DESTINATION lib)
-endif(WIN32)
+endif()
 
 if(APPLE)
 set(OSX_INSTALL_NAMES_SCRIPT "${libkar_SOURCE_DIR}/scripts/osx_install_names.sh")
@@ -42,6 +42,6 @@ add_custom_target(osx_install_names ALL
 		QtCore.framework/Versions/4/QtCore
 	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 	DEPENDS kar)
-endif(APPLE)
+endif()
 
 add_subdirectory(tools)
