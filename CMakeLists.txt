@@ -25,12 +25,12 @@ if(APPLE)
 endif()
 
 if(WIN32)
-install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include)
+install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include/kar)
 install(TARGETS kar
 	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
 	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
 else()
-install(FILES ${INCLUDES} DESTINATION include)
+install(FILES ${INCLUDES} DESTINATION include/kar)
 install(TARGETS kar DESTINATION lib)
 endif()
 
