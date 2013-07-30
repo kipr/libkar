@@ -75,8 +75,8 @@ namespace kiss
 	};
 }
 
-QDataStream& operator<<(QDataStream& out, const kiss::Kar& kar);
-QDataStream& operator>>(QDataStream& in, kiss::Kar& kar);
+DLL_EXPORT QDataStream& operator<<(QDataStream& out, const kiss::Kar& kar);
+DLL_EXPORT QDataStream& operator>>(QDataStream& in, kiss::Kar& kar);
 
 #endif
 
