@@ -1,5 +1,5 @@
-#ifndef _EXPORT_H_
-#define _EXPORT_H_
+#ifndef _COMPAT_HPP_
+#define _COMPAT_HPP_
 
 #ifdef WIN32
 #define DLL_EXPORT __declspec(dllexport)

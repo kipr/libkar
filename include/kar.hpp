@@ -28,7 +28,7 @@
 #include <QDataStream>
 #include <QSharedPointer>
 
-#include "export.h"
+#include "compat.hpp"
 
 #define KAR_SPECIAL_PREFIX "internal::"
 
