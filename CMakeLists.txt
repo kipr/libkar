@@ -17,7 +17,7 @@ file(GLOB INCLUDES ${INCLUDE}/*.h ${INCLUDE}/*.hpp)
 file(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
 
 set(LIBRARY_OUTPUT_PATH ${libkar_SOURCE_DIR}/lib)
-add_library(kar SHARED ${SOURCES})
+add_library(kar SHARED ${SOURCES} ${INCLUDES})
 target_link_libraries(kar ${QT_LIBRARIES})
 
 if(APPLE)
