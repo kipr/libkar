@@ -145,6 +145,10 @@ int main(int argc, char *argv[])
 		if(!loadMap(argc != 4 ? name + "_win.kam" : argv[4], dirs, files)) {
 			return false;
 		}
+#elif defined(Q_OS_LINUX)
+		if(!loadMap(argc != 4 ? name + "_linux.kam" : argv[4], dirs, files)) {
+			return false;
+		}
 #endif
 		
 		if(!create(name, argv[3], dirs, files)) {
