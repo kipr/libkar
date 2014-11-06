@@ -9,15 +9,24 @@ Requirements
 * Qt 5.0 or higher
 * CMake 2.8.12
 
-Building (OS X and Linux)
-=========================
+Building
+========
 
+## OS X and Linux
 	cd libkar
 	mkdir build
 	cd build
 	cmake ..
 	make
 	make install
+
+## Windows
+1. Clone this repository into `<dir>\libkar`.
+2. Configure it and generate the makefiles with cmake. Set the build directory to `<dir>\libkar\build`.
+3. Open `<dir>\libkar\build\libkar.sln` with Visual Studio
+4. Build the `INSTALL` project
+
+The binaries/includes/libraries are installed into `<dir>\prefix`
 
 Example Usage
 =============
