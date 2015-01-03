@@ -16,15 +16,12 @@ set(LIBRARY_OUTPUT_PATH ${libkar_SOURCE_DIR}/lib)
 add_library(kar SHARED ${SOURCES} ${INCLUDES})
 qt5_use_modules(kar Core)
 
-if(WIN32)
-install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include/kar)
-install(TARGETS kar
-	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
-	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
-else()
-install(FILES ${INCLUDES} DESTINATION include/kar)
-install(TARGETS kar DESTINATION lib)
+if(WIN32 AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/../prefix)
 endif()
+
+install(FILES ${INCLUDES} DESTINATION include/kar) 
+install(TARGETS kar DESTINATION lib) 
 
 if(APPLE)
 set(OSX_INSTALL_NAMES_SCRIPT "${libkar_SOURCE_DIR}/scripts/osx_install_names.sh")
