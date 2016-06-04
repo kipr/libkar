@@ -13,12 +13,15 @@ Building
 ========
 
 ## OS X and Linux
-	cd libkar
-	mkdir build
-	cd build
-	cmake ..
-	make
-	make install
+
+```shell
+cd libkar
+mkdir build
+cd build
+cmake ..
+make
+make install
+```
 
 ## Windows
 1. Clone this repository into `<dir>\libkar`.
