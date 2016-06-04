@@ -14,6 +14,8 @@ Building
 
 ## OS X and Linux
 
+Run the follow shell commands in the terminal.  If the last command fails, you may need to elevate prileges.  In Debian/Ubuntu systems, replace `make install` with `sudo make install`.
+
 ```shell
 cd libkar
 mkdir build
