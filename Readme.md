@@ -13,12 +13,17 @@ Building
 ========
 
 ## OS X and Linux
-	cd libkar
-	mkdir build
-	cd build
-	cmake ..
-	make
-	make install
+
+Run the follow shell commands in the terminal.  If the last command fails, you may need to elevate prileges.  In Debian/Ubuntu systems, replace `make install` with `sudo make install`.
+
+```shell
+cd libkar
+mkdir build
+cd build
+cmake ..
+make
+make install
+```
 
 ## Windows
 1. Clone this repository into `<dir>\libkar`.
@@ -31,11 +36,13 @@ The binaries/includes/libraries are installed into `<dir>\prefix`
 Example Usage
 =============
 
-	Kiss::Kar *archive = Kiss::Kar::create();
-	archive->addFile("hello.txt", "Hello, World!\n");
-	archive->save("test.kar");
-	delete archive;
-	
+```cpp
+Kiss::Kar *archive = Kiss::Kar::create();
+archive->addFile("hello.txt", "Hello, World!\n");
+archive->save("test.kar");
+delete archive;
+```
+
 Authors
 =======
 
