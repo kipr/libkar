@@ -35,3 +35,9 @@ add_custom_target(osx_install_names ALL
 endif()
 
 add_subdirectory(tools)
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "KIPR")
+set(CPACK_PACKAGING_INSTALL_PREFIX /usr/local/)
+set(CPACK_DEBIAN_PACKAGE_ARHCITECTURE arm64)
+include(CPack)
