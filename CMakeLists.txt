@@ -2,7 +2,7 @@ project(libkar)
 
 cmake_minimum_required(VERSION 2.8.12)
 
-find_package(Qt5Core REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 set(INCLUDE ${libkar_SOURCE_DIR}/include)
 set(SRC ${libkar_SOURCE_DIR}/src)
@@ -14,7 +14,7 @@ file(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
 
 set(LIBRARY_OUTPUT_PATH ${libkar_SOURCE_DIR}/lib)
 add_library(kar SHARED ${SOURCES} ${INCLUDES})
-qt5_use_modules(kar Core)
+target_link_libraries(kar Qt6::Core)
 
 if(WIN32 AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/../prefix)
@@ -35,3 +35,9 @@ add_custom_target(osx_install_names ALL
 endif()
 
 add_subdirectory(tools)
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "KIPR")
+set(CPACK_PACKAGING_INSTALL_PREFIX /usr/local/)
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE arm64)
+include(CPack)
