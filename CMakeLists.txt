@@ -1,6 +1,5 @@
-project(libkar)
-
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
+project(libkar VERSION 1.0.1)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
@@ -40,4 +39,5 @@ set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "KIPR")
 set(CPACK_PACKAGING_INSTALL_PREFIX /usr/local/)
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE arm64)
+set((CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6core6t64 (>= 6.8.0), libc6, libgcc-s1, libstdc++6"))
 include(CPack)

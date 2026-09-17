@@ -1,0 +1,30 @@
+{
+  "name": "libkar Dev",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "..",
+    "target": "dev"
+  },
+  "remoteUser": "code",
+  "mounts": [
+    "source=claude-config,target=/home/code/.claude,type=volume",
+    "source=codex-config,target=/home/code/.codex,type=volume"
+  ],
+  // seccomp=unconfined: lets the agents' bubblewrap sandbox run
+  // (disables Docker's syscall filter for this container).
+  "runArgs": ["--security-opt=seccomp=unconfined"],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "github.vscode-pull-request-github",
+        "ms-vscode.cpptools-extension-pack",
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "fish",
+        "terminal.integrated.profiles.linux": {
+          "fish": { "path": "/usr/bin/fish" }
+        }
+      }
+    }
+  }
+}

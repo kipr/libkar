@@ -1,16 +1,42 @@
-libkar
-======
+# libkar
 
 libkar is an extremely simple Qt based keyed archiver for usage by the KISS IDE suite of applications. This is a separate library because it is used as a data interchange format between applications in the suite.
 
-Requirements
-============
+# Requirements
 
-* Qt 5.0 or higher
-* CMake 2.8.12
+* Qt 6
+* CMake 3.5
 
-Building
-========
+# Building
+
+## Cross-compile to the Wombat (Raspberry Pi 3b+)
+
+Local build, tested on Debian 13:
+
+```sh
+sudo dpkg --add-architecture arm64
+sudo apt update
+sudo apt install make cmake gcc-aarch64-linux-gnu g++-aarch64-linux-gnu qt6-base-dev:arm64
+cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=toolchain/aarch64-linux-gnu.cmake .
+cmake --build build -j "$(nproc)"
+```
+
+Build with Docker:
+
+```sh
+docker build -t libkar-builder .
+docker run --rm --mount type=bind,source=.,destination=/src/ libkar-builder sh -c 'cmake -B/src/build -DCMAKE_TOOLCHAIN_FILE=/src/toolchain/aarch64-linux-gnu.cmake /src && cmake --build /src/build -j "$(nproc)" && cd /src/build && cpack'
+```
+
+Runtime dependencies on Pi:
+
+```sh
+$ readelf -d /usr/local/lib/libkar.so | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libQt6Core.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+```
 
 ## OS X and Linux
 
@@ -33,8 +59,8 @@ make install
 
 The binaries/includes/libraries are installed into `<dir>\prefix`
 
-Example Usage
-=============
+# Example Usage
+
 
 ```cpp
 Kiss::Kar *archive = Kiss::Kar::create();
@@ -43,12 +69,10 @@ archive->save("test.kar");
 delete archive;
 ```
 
-Authors
-=======
+# Authors
 
 * Braden McDorman
 
-License
-=======
+# License
 
 libkar is released under the terms of the GPLv3 license. For more information, see the LICENSE file in the root of this project.
